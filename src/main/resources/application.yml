@@ -1,1 +1,19 @@
-spring.application.name=todo-api
+spring:
+  application:
+    name: todo-api
+
+  # H2 in-memory DB
+  datasource:
+    url: jdbc:h2:mem:todo;MODE=MYSQL # use H2 like MYSQL
+
+  # manage console
+  h2:
+    console:
+      enabled: true
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
