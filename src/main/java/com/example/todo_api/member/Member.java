@@ -2,10 +2,12 @@ package com.example.todo_api.member;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
+@NoArgsConstructor
 public class Member {
 
     public Member(String email, String password) {

@@ -11,12 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Todo {
 
-    public Todo(String content, boolean isChecked, Member member) {
-        this.content = content;
-        this.isChecked = isChecked;
-        this.member = member;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "todo_id")
@@ -31,4 +25,14 @@ public class Todo {
     @JoinColumn(name = "member_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
+
+    public Todo(String content, boolean isChecked, Member member) {
+        this.content = content;
+        this.isChecked = isChecked;
+        this.member = member;
+    }
+
+    public void updateContent(String newContent) {
+        this.content = newContent;
+    }
 }
