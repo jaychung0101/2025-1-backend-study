@@ -17,3 +17,7 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.MySQL8Dialect
+
+  jwt:
+    secret: YmFzZTY0ZW5jb2RlZHNlY3JldGtleWdla2Fu
+    expiration: 3600000
