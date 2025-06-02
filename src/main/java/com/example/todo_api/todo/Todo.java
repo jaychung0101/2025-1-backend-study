@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -20,19 +21,23 @@ public class Todo {
     private String content;
 
     @Column(name = "todo_is_checked", columnDefinition = "tinyint(1)")
-    private boolean isChecked;
+    private boolean checked;
 
     @JoinColumn(name = "member_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
-    public Todo(String content, boolean isChecked, Member member) {
+    public Todo(String content, Member member) {
         this.content = content;
-        this.isChecked = isChecked;
+        this.checked = false;
         this.member = member;
     }
 
     public void updateContent(String newContent) {
         this.content = newContent;
+    }
+
+    public void toggleIsChecked() {
+        this.checked = !this.checked;
     }
 }
