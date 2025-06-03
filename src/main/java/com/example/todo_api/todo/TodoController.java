@@ -3,6 +3,7 @@ package com.example.todo_api.todo;
 import com.example.todo_api.todo.dto.request.TodoCreateRequest;
 import com.example.todo_api.todo.dto.request.TodoUpdateRequest;
 import com.example.todo_api.todo.dto.response.TodoResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class TodoController {
     private final TodoService todoService;
 
     @PostMapping
-    public ResponseEntity<Void> createTodo(@RequestBody TodoCreateRequest request) {
+    public ResponseEntity<Void> createTodo(@RequestBody @Valid TodoCreateRequest request) {
         Long todoId = todoService.createTodo(request.getContent(), request.getMemberId());
         return ResponseEntity.created(URI.create("/todo/" + todoId)).build();
     }
