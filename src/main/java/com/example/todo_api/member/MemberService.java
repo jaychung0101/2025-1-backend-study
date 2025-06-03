@@ -1,10 +1,16 @@
 package com.example.todo_api.member;
 
 import com.example.todo_api.bean.JwtProvider;
+import com.example.todo_api.common.ConflictException;
+import com.example.todo_api.common.ForbiddenException;
+import com.example.todo_api.common.NotFoundException;
+import com.example.todo_api.common.message.ErrorMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.example.todo_api.common.message.ErrorMessage.*;
 
 @Service
 @RequiredArgsConstructor
@@ -17,7 +23,7 @@ public class MemberService {
     @Transactional
     public Long save(String email, String password) {
         if(memberRepository.findByEmail(email).isPresent()) {
-            throw new RuntimeException("이미 존재하는 이메일입니다." + email);
+            throw new ConflictException(EMAIL_EXIST.getMessage() + email);
         }
 
         String encodedPassword = passwordEncoder.encode(password);
@@ -27,10 +33,10 @@ public class MemberService {
     @Transactional
     public String login(String email, String password) {
         Member member = memberRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 이메일입니다."));
+                .orElseThrow(() -> new NotFoundException(EMAIL_NOT_FOUND.getMessage() + email));
 
         if (!passwordEncoder.matches(password, member.getPassword())) {
-            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+            throw new ForbiddenException(PASSWORD_WRONG.getMessage());
         }
 
         return jwtProvider.createToken(email);

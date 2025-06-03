@@ -1,5 +1,8 @@
 package com.example.todo_api.follow;
 
+import com.example.todo_api.common.ForbiddenException;
+import com.example.todo_api.common.NotFoundException;
+import com.example.todo_api.common.message.ErrorMessage;
 import com.example.todo_api.member.Member;
 import com.example.todo_api.member.MemberRepository;
 import com.example.todo_api.member.MemberService;
@@ -12,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+
+import static com.example.todo_api.common.message.ErrorMessage.*;
 
 @Service
 @RequiredArgsConstructor
@@ -46,12 +51,12 @@ public class FollowService {
         Member following = getMemberOrThrow(followingId);
 
         if (isNotMutualFollow(follower, following)) {
-            throw new RuntimeException("친구가 아닌 사람의 할 일을 조회할 수 없습니다.");
+            throw new ForbiddenException(RETRIEVE_NON_FRIEND.getMessage());
         }
 
         Todo todo = todoRepository.findById(todoId);
         if (todo == null) {
-            throw new RuntimeException("할 일이 존재하지 않습니다.");
+            throw new NotFoundException(TODO_NOT_FOUND.getMessage() + todoId);
         }
 
         return todo;
@@ -63,7 +68,7 @@ public class FollowService {
         Member following = getMemberOrThrow(followingId);
 
         if (isNotMutualFollow(follower, following)) {
-            throw new RuntimeException("친구가 아닌 사람의 할 일을 조회할 수 없습니다.");
+            throw new ForbiddenException(RETRIEVE_NON_FRIEND.getMessage());
         }
 
         return todoRepository.findAllByMember(following);
@@ -78,6 +83,6 @@ public class FollowService {
 
     private Member getMemberOrThrow(Long id) {
         return memberRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다: " + id));
+                .orElseThrow(() -> new NotFoundException(MEMBER_NOT_FOUND.getMessage() + id));
     }
 }
