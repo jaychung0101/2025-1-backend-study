@@ -16,6 +16,12 @@ import java.util.List;
 public class FollowController {
     private final FollowService followService;
 
+    @PostMapping("/{followerId}/follow")
+    public ResponseEntity<Void> followToggle(@PathVariable("followerId") Long followerId, @RequestParam("followingId") Long followingId) {
+        followService.followToggle(followerId, followingId);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/{followerId}/list")
     public ResponseEntity<Response<List<Todo>>> getFriendTodos(@PathVariable("followerId") Long followerId, @RequestParam("followingId") Long followingId) {
         List<Todo> friendTodos = followService.getFriendTodos(followerId, followingId);
@@ -41,11 +47,5 @@ public class FollowController {
                 todo);
 
         return ResponseEntity.ok(response);
-    }
-
-    @PostMapping("/{followerId}/follow")
-    public ResponseEntity<Void> followToggle(@PathVariable("followerId") Long followerId, @RequestParam("followingId") Long followingId) {
-        followService.followToggle(followerId, followingId);
-        return ResponseEntity.ok().build();
     }
 }

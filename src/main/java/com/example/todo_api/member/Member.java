@@ -23,6 +23,6 @@ public class Member {
     @Column(name = "member_email", columnDefinition = "varchar(30)")
     private String email;
 
-    @Column(name = "member_password", columnDefinition = "varchar(30)")
+    @Column(name = "member_password", columnDefinition = "varchar(256)")
     private String password;
 }
